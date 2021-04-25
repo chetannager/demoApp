@@ -1,9 +1,26 @@
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'material-react-toastify';
+import 'material-react-toastify/dist/ReactToastify.css';
 
 export const Notification = (msg, type, timeout = 1500, progressBar = false, theme = 'nest') => {
-    // new Noty({ text: msg, theme, type, timeout, progressBar, }).show();
-    // new toast.success(msg, {
-    //     position: toast.POSITION.TOP_CENTER
-    // });
+    if (type == "error") {
+        toast.error(msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+        });
+    } else if (type == "success") {
+        toast.success(msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+        });
+    }
 }

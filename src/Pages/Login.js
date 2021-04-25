@@ -7,6 +7,8 @@ import useForm from '../components/useForm'
 import axios from 'axios'
 import { Notification } from '../components/ui/Noty'
 import { BrowserRouter as Router, useHistory, Redirect } from 'react-router-dom'
+import { ToastContainer, toast } from 'material-react-toastify';
+import 'material-react-toastify/dist/ReactToastify.css';
 
 
 const initialState = {
@@ -18,7 +20,7 @@ function Login() {
     const history = useHistory();
     const [isLoading, setisLoading] = useState(false)
     const JWT_TOKEN = localStorage.getItem("JWT_TOKEN")
-    const [isLoggedIn, setisLoggedIn] = useState(true)
+    const [isLoggedIn, setisLoggedIn] = useState(false)
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
         if ('username' in fieldValues)
@@ -62,9 +64,13 @@ function Login() {
         if (JWT_TOKEN == null) {
             setisLoggedIn(false)
         } else {
-            history.push("/");
+            setisLoggedIn(true)
         }
     }, [])
+
+    if (isLoggedIn === true) {
+        return <Redirect to="/" />
+    }
 
     return (
         <React.Fragment>
@@ -79,77 +85,88 @@ function Login() {
 
                     <Grid container md={5}>
                         <Card>
-                        <Container style={{ paddingRight: '100px' }}>
-                            <div className="mb-4">
-                                <h1 className="mb-0">Welcome Admin!</h1>
-                                <div className="mb-2" style={{ borderBottom: '2px solid rgb(63 81 181)', width: '50px' }}></div>
-                                <p>Please enter username &amp; password to verify your account!</p>
-                            </div>
-                            <div className="mt-5">
-                                <form onSubmit={authentication} autoComplete="off" noValidate>
-                                    <Controls.TextField
-                                        label="Username"
-                                        placeholder="Enter username"
-                                        fullWidth
-                                        name="username"
-                                        value={values.username}
-                                        onChange={handleInputChange}
-                                        error={errors.username}
-                                        // inputRef={input => input && input.focus()}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <AccountCircle />
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                        disabled={isLoading ? true : false}
-                                    />
-
-                                    <Controls.TextField
-                                        type="password"
-                                        label="Password"
-                                        placeholder="Enter password"
-                                        fullWidth
-                                        name="password"
-                                        value={values.password}
-                                        onChange={handleInputChange}
-                                        error={errors.password}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <Lock />
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                        disabled={isLoading ? true : false}
-                                    />
-
-                                    <div className="mt-3">
-                                        <Controls.Button
-                                            text={isLoading ? (<CircularProgress size={30} color="secondary" thickness="5.0" />) : "CONTINUE"}
-                                            style={{ borderRadius: '30px', padding: '12px 22px' }}
+                            <Container style={{ paddingRight: '100px' }}>
+                                <div className="mb-4">
+                                    <h1 className="mb-0">Welcome Admin!</h1>
+                                    <div className="mb-2" style={{ borderBottom: '2px solid rgb(63 81 181)', width: '50px' }}></div>
+                                    <p>Please enter username &amp; password to verify your account!</p>
+                                </div>
+                                <div className="mt-5">
+                                    <form onSubmit={authentication} autoComplete="off" noValidate>
+                                        <Controls.TextField
+                                            label="Username"
+                                            placeholder="Enter username"
                                             fullWidth
-                                            disabled={isLoading ? true : false}
-                                            type="submit"
-                                        />
-                                        <Controls.Button
-                                            text="New User? Register here"
-                                            style={{ borderRadius: '30px', padding: '12px 22px' }}
-                                            fullWidth
-                                            variant="text"
-                                            onClick={() => {
-                                                history.push("/register");
+                                            name="username"
+                                            value={values.username}
+                                            onChange={handleInputChange}
+                                            error={errors.username}
+                                            // inputRef={input => input && input.focus()}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <AccountCircle />
+                                                    </InputAdornment>
+                                                )
                                             }}
+                                            disabled={isLoading ? true : false}
                                         />
-                                    </div>
-                                </form>
-                            </div>
-                        </Container>
+
+                                        <Controls.TextField
+                                            type="password"
+                                            label="Password"
+                                            placeholder="Enter password"
+                                            fullWidth
+                                            name="password"
+                                            value={values.password}
+                                            onChange={handleInputChange}
+                                            error={errors.password}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <Lock />
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                            disabled={isLoading ? true : false}
+                                        />
+
+                                        <div className="mt-3">
+                                            <Controls.Button
+                                                text={isLoading ? (<CircularProgress size={30} color="secondary" thickness="5.0" />) : "CONTINUE"}
+                                                style={{ borderRadius: '30px', padding: '12px 22px' }}
+                                                fullWidth
+                                                disabled={isLoading ? true : false}
+                                                type="submit"
+                                            />
+                                            <Controls.Button
+                                                text="New User? Register here"
+                                                style={{ borderRadius: '30px', padding: '12px 22px' }}
+                                                fullWidth
+                                                variant="text"
+                                                onClick={() => {
+                                                    history.push("/register");
+                                                }}
+                                            />
+                                        </div>
+                                    </form>
+                                </div>
+                            </Container>
                         </Card>
                     </Grid>
                 </Grid>
             </Card>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </React.Fragment>
     )
 }

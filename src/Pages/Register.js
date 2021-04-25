@@ -7,6 +7,8 @@ import useForm from '../components/useForm'
 import axios from 'axios'
 import { Notification } from '../components/ui/Noty'
 import { BrowserRouter as Router, useHistory, Redirect } from 'react-router-dom'
+import { ToastContainer, toast } from 'material-react-toastify';
+import 'material-react-toastify/dist/ReactToastify.css';
 
 
 const initialState = {
@@ -50,7 +52,8 @@ function Register() {
                 setisLoading(false)
                 if (response.status === 200 && response.data.success && response.data.RESPONSE.registerOperation) {
                     Notification(response.data.RESPONSE.message, "success");
-                    history.push("/");
+                    // history.push("/");
+                    setValues(initialState)
 
                 }
             }).catch(error => {
@@ -176,6 +179,18 @@ function Register() {
                         <img src="https://farmsoc.com/wp-content/uploads/2020/04/mobile-login-concept-illustration_114360-135.jpg" className="img-fluid" alt="" />
                     </Grid>
                 </Grid>
+
+                <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             </React.Fragment>
     )
 }
