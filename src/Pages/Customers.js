@@ -3,7 +3,7 @@ import { baseAPIUrl } from '../config/endpoints';
 import { BrowserRouter as Router, Route, useHistory, Redirect } from 'react-router-dom'
 import Modal from '../components/ui/Modal';
 import { Breadcrumbs, Card, Typography } from '@material-ui/core';
-import { CircularProgress, TableBody, TableCell, TableRow, TableFooter, Avatar, Toolbar, InputAdornment, IconButton, FormControl, Tooltip } from '@material-ui/core'
+import { Badge, CircularProgress, TableBody, TableCell, TableRow, TableFooter, Avatar, Toolbar, InputAdornment, IconButton, FormControl, Tooltip } from '@material-ui/core'
 import Controls from '../components/Controls'
 import { FilterList, Search } from '@material-ui/icons'
 import useTable from '../components/useTable'
@@ -11,6 +11,9 @@ import axios from 'axios'
 import Header from '../components/Header';
 import { Link } from 'react-router-dom'
 import Sidebar from '../components/Sidebar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 
 const headCells = [
@@ -45,6 +48,7 @@ const getJWTToken = () => {
     return localStorage.getItem("JWT_TOKEN");
 }
 function Customers() {
+    const ITEM_HEIGHT = 48;
     const history = useHistory();
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
     const JWT_TOKEN = localStorage.getItem("JWT_TOKEN")
@@ -65,6 +69,17 @@ function Customers() {
             }
         })
     }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const getAllCustomers = () => {
         if (navigator.onLine) {
@@ -91,6 +106,10 @@ function Customers() {
         } else {
             Notification("You are Offline! 🌐", "warning");
         }
+    }
+
+    const deleteCustomer = (customerId) => {
+
     }
 
     useEffect(() => {
@@ -159,22 +178,36 @@ function Customers() {
                                                             <TableCell>{customer.customer_email_address}</TableCell>
                                                             <TableCell>
                                                                 {customer.customer_status == 1 ? (
-                                                                    <span className="badge badge-success">Active</span>
+                                                                    <Badge badgeContent={"Active"} color="primary" />
                                                                 ) : (
-                                                                    <span className="badge badge-danger">Deactivate</span>
+                                                                    <Badge badgeContent={"Deactivate"} color="secondary" />
                                                                 )}
                                                             </TableCell>
                                                             <TableCell>
-                                                                <div className="list-icons">
-                                                                    <div className="dropdown">
-                                                                        <a href="javascript:void(0)" className="list-icons-item" data-toggle="dropdown">
-                                                                            <i className="icon-menu9"></i>
-                                                                        </a>
-                                                                        <div className="dropdown-menu dropdown-menu-right">
-                                                                            <a onClick={() => { }} className="dropdown-item"><i className="icon-trash mr-1"></i>Delete Category </a>
-                                                                            <a onClick={() => { }} className="dropdown-item"><i className="icon-paperplane mr-1"></i>Send Notification </a>
-                                                                        </div>
-                                                                    </div>
+                                                                <div>
+                                                                    <IconButton
+                                                                        aria-label="more"
+                                                                        aria-controls="long-menu"
+                                                                        aria-haspopup="true"
+                                                                        onClick={handleClick}
+                                                                    >
+                                                                        <MoreVertIcon />
+                                                                    </IconButton>
+                                                                    <Menu
+                                                                        id="long-menu"
+                                                                        anchorEl={anchorEl}
+                                                                        keepMounted
+                                                                        open={open}
+                                                                        onClose={handleClose}
+                                                                    >
+                                                                        <MenuItem onClick={handleClose}>
+                                                                            Edit
+                                                                    </MenuItem>
+
+                                                                        <MenuItem onClick={handleClose}>
+                                                                            Delete
+                                                                    </MenuItem>
+                                                                    </Menu>
                                                                 </div>
                                                             </TableCell>
                                                         </TableRow>

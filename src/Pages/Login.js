@@ -89,7 +89,7 @@ function Login() {
                                 <div className="mb-4">
                                     <h1 className="mb-0">Welcome Admin!</h1>
                                     <div className="mb-2" style={{ borderBottom: '2px solid rgb(63 81 181)', width: '50px' }}></div>
-                                    <p>Please enter username &amp; password to verify your account!</p>
+                                    <p>Please enter username &amp; password!</p>
                                 </div>
                                 <div className="mt-5">
                                     <form onSubmit={authentication} autoComplete="off" noValidate>
